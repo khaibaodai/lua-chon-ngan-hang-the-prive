@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module Tính Toán & Phân Tích Phương Án Vay Vốn - The Privé - OneS</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            color: #343a40;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1a365d 0%, #2a4365 100%);
+        }
+        .bank-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        .bank-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .bank-card.active {
+            border-left: 4px solid #4299e1;
+        }
+        .bank-logo {
+            width: 60px;
+            height: 60px;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        .input-group {
+            position: relative;
+        }
+        .input-group input {
+            padding-right: 3rem;
+        }
+        .input-group span {
+            position: absolute;
+            right: 0.75rem;
+            top: 0.75rem;
+            color: #718096;
+        }
+        .recommendation-section {
+            border-left: 4px solid #48bb78;
+        }
+        .highlight {
+            background-color: rgba(66, 153, 225, 0.1);
+            border-left: 3px solid #4299e1;
+            padding-left: 1rem;
+        }
+        .chart-container {
+            height: 300px;
+        }
+        @media print {
+            body {
+                width: 100%;
+                margin: 0;
+                padding: 0;
+                background-color: white;
+            }
+            .no-print {
+                display: none;
+            }
+            .page-break {
+                page-break-after: always;
+            }
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+        }
+        .collapsible-content.open {
+            max-height: 2000px;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-bg text-white py-6 shadow-lg">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="text-center md:text-left mb-4 md:mb-0">
+                    <h1 class="text-3xl font-bold">The Privé</h1>
+                    <p class="text-blue-100">Module Tính Toán & Phân Tích Phương Án Vay Vốn</p>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="bg-white bg-opacity-20 rounded-lg px-4 py-2">
+                        <span class="text-sm text-blue-100">Đối tác ngân hàng</span>
+                        <div class="flex space-x-2 mt-1">
+                            <span class="text-xs px-2 py-1 bg-blue-700 rounded-full">LPBank</span>
+                            <span class="text-xs px-2 py-1 bg-blue-700 rounded-full">MB</span>
+                            <span class="text-xs px-2 py-1 bg-blue-700 rounded-full">TPBank</span>
+                            <span class="text-xs px-2 py-1 bg-blue-700 rounded-full">VCB</span>
+                            <span class="text-xs px-2 py-1 bg-blue-700 rounded-full">Vietinbank</span>
+                            <span class="text-xs px-2 py-1 bg-blue-700 rounded-full">MBV</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 md:px-6 py-8">
+        <!-- Input Section -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Thông tin cá nhân</h2>
+            <p class="text-gray-600 mb-6">Vui lòng cung cấp thông tin tài chính cá nhân để nhận được phương án vay vốn phù hợp nhất.</p>
+            
+            <form id="loanForm" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="input-group">
+                    <label for="initialCapital" class="block text-gray-700 font-medium mb-2">Vốn ban đầu (VNĐ)</label>
+                    <input type="text" id="initialCapital" name="initialCapital" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="1,000,000,000">
+                    <span>VNĐ</span>
+                </div>
+                
+                <div class="input-group">
+                    <label for="monthlyIncome" class="block text-gray-700 font-medium mb-2">Doanh thu tháng (VNĐ)</label>
+                    <input type="text" id="monthlyIncome" name="monthlyIncome" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="50,000,000">
+                    <span>VNĐ</span>
+                </div>
+                
+                <div class="input-group">
+                    <label for="propertyPrice" class="block text-gray-700 font-medium mb-2">Giá sản phẩm (VNĐ)</label>
+                    <input type="text" id="propertyPrice" name="propertyPrice" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="3,000,000,000">
+                    <span>VNĐ</span>
+                </div>
+                
+                <div class="md:col-span-3">
+                    <button type="button" id="calculateButton" class="w-full md:w-auto px-8 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-200 font-medium">
+                        <i class="fas fa-calculator mr-2"></i>Phân tích phương án vay vốn
+                    </button>
+                </div>
+            </form>
+        </section>
+        
+        <!-- Results Section (initially hidden) -->
+        <div id="resultsSection" class="hidden">
+            <!-- Overview -->
+            <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Tổng quan phương án vay vốn</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                        <p class="text-sm text-blue-600 mb-1">Vốn ban đầu</p>
+                        <p id="overview-initial-capital" class="text-2xl font-bold text-gray-800">1,000,000,000 VNĐ</p>
+                        <p id="overview-capital-percent" class="text-sm text-gray-500">33.33% giá trị sản phẩm</p>
+                    </div>
+                    <div class="bg-green-50 p-4 rounded-lg border border-green-100">
+                        <p class="text-sm text-green-600 mb-1">Tổng khoản vay tối đa</p>
+                        <p id="overview-max-loan" class="text-2xl font-bold text-gray-800">2,000,000,000 VNĐ</p>
+                        <p id="overview-loan-percent" class="text-sm text-gray-500">66.67% giá trị sản phẩm</p>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
+                        <p class="text-sm text-purple-600 mb-1">Giá trị sản phẩm</p>
+                        <p id="overview-property-price" class="text-2xl font-bold text-gray-800">3,000,000,000 VNĐ</p>
+                        <p class="text-sm text-gray-500">Dự án The Privé</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recommendation Section -->
+            <section class="bg-white rounded-lg shadow-md p-6 mb-8 recommendation-section">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Khuyến nghị và Nhận xét</h2>
+                <div id="financial-situation" class="p-4 bg-green-50 border border-green-200 rounded-lg mb-4">
+                    <h3 class="text-lg font-semibold text-green-700"><i class="fas fa-chart-line mr-2"></i>Tình hình tài chính của bạn</h3>
+                    <p id="finance-summary" class="mt-2">Dựa trên thông tin bạn cung cấp, bạn thuộc nhóm khách hàng có vốn tự có <span id="capital-status">cao</span>.</p>
+                </div>
+                
+                <div id="recommended-bank" class="p-4 bg-blue-50 border border-blue-200 rounded-lg mb-4">
+                    <h3 class="text-lg font-semibold text-blue-700"><i class="fas fa-university mr-2"></i>Ngân hàng phù hợp nhất</h3>
+                    <p id="bank-recommendation" class="mt-2">Chúng tôi khuyến nghị bạn nên lựa chọn <span id="best-bank" class="font-medium">MB</span> với thời gian ân hạn dài và điều kiện vay linh hoạt.</p>
+                </div>
+
+                <div class="mb-4">
+                    <button id="showDetailedRecommendations" class="w-full text-left px-4 py-2 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none">
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-medium">Xem khuyến nghị chi tiết</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </button>
+                    <div id="detailedRecommendations" class="collapsible-content mt-2 border-l-4 border-gray-300 pl-4">
+                        <div class="p-4 bg-white border border-gray-200 rounded-lg">
+                            <h4 class="font-semibold text-gray-800 mb-2">Phân tích dựa trên vốn tự có</h4>
+                            <p class="text-gray-700 mb-4" id="capital-analysis">Với vốn tự có cao (trên 40% giá trị căn hộ), bạn có thể đàm phán điều kiện vay tốt hơn và không cần vay tối đa.</p>
+                            
+                            <h4 class="font-semibold text-gray-800 mb-2">Phân tích dựa trên thu nhập</h4>
+                            <p class="text-gray-700 mb-4" id="income-analysis">Thu nhập hiện tại của bạn đủ để đáp ứng khoản vay với tỷ lệ hợp lý so với thu nhập hàng tháng.</p>
+                            
+                            <h4 class="font-semibold text-gray-800 mb-2">Chiến lược đề xuất</h4>
+                            <ul class="list-disc pl-6 text-gray-700 space-y-2 mb-4" id="strategy-recommendations">
+                                <li>Thanh toán trước 40% giá trị căn hộ từ vốn tự có</li>
+                                <li>Vay 60% từ ngân hàng MB với thời gian ân hạn 60 tháng</li>
+                                <li>Tận dụng thời gian hỗ trợ lãi suất để đầu tư vốn tự có vào các kênh sinh lời khác</li>
+                            </ul>
+                            
+                            <h4 class="font-semibold text-gray-800 mb-2">Lưu ý quan trọng</h4>
+                            <ul class="list-disc pl-6 text-gray-700 space-y-2" id="important-notes">
+                                <li>Các khuyến nghị dựa trên thông tin chung và cần được đánh giá thêm theo tình hình cá nhân</li>
+                                <li>Nên tham khảo ý kiến chuyên gia tài chính hoặc tư vấn ngân hàng trước khi quyết định</li>
+                                <li>Lãi suất sau thời gian hỗ trợ có thể biến động theo thị trường</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <h3 class="text-lg font-semibold text-yellow-700"><i class="fas fa-lightbulb mr-2"></i>Lời khuyên bổ sung</h3>
+                    <p class="mt-2">Nên cân nhắc khả năng thanh toán trước hạn sau 24 tháng (sau khi hết thời gian hỗ trợ lãi suất) để giảm chi phí lãi vay dài hạn.</p>
+                </div>
+            </section>
+
+            <!-- Bank Comparison -->
+            <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">So sánh phương án vay vốn các ngân hàng</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="py-3 px-4 border-b text-left text-sm font-medium text-gray-700">Ngân hàng</th>
+                                <th class="py-3 px-4 border-b text-left text-sm font-medium text-gray-700">Tỷ lệ vay tối đa</th>
+                                <th class="py-3 px-4 border-b text-left text-sm font-medium text-gray-700">Thời gian hỗ trợ lãi</th>
+                                <th class="py-3 px-4 border-b text-left text-sm font-medium text-gray-700">Thời gian ân hạn</th>
+                                <th class="py-3 px-4 border-b text-left text-sm font-medium text-gray-700">Thời hạn vay</th>
+                                <th class="py-3 px-4 border-b text-left text-sm font-medium text-gray-700">Khoản vay tối đa</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bank-comparison">
+                            <!-- Filled by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Detailed Bank Analysis Tabs -->
+            <section class="mb-8">
+                <div class="flex overflow-x-auto scrollbar-hide mb-4 border-b border-gray-200" id="bank-tabs">
+                    <button class="bank-tab px-6 py-3 text-center whitespace-nowrap font-medium text-blue-600 border-b-2 border-blue-600" data-bank="lpbank">LPBank</button>
+                    <button class="bank-tab px-6 py-3 text-center whitespace-nowrap font-medium text-gray-500" data-bank="mb">MB</button>
+                    <button class="bank-tab px-6 py-3 text-center whitespace-nowrap font-medium text-gray-500" data-bank="tpbank">TPBank</button>
+                    <button class="bank-tab px-6 py-3 text-center whitespace-nowrap font-medium text-gray-500" data-bank="vcb">VCB</button>
+                    <button class="bank-tab px-6 py-3 text-center whitespace-nowrap font-medium text-gray-500" data-bank="vietinbank">Vietinbank</button>
+                    <button class="bank-tab px-6 py-3 text-center whitespace-nowrap font-medium text-gray-500" data-bank="mbv">MBV</button>
+                </div>
+                
+                <div id="bank-content" class="bank-content bg-white rounded-lg shadow-md p-6">
+                    <!-- Will be filled by JavaScript -->
+                </div>
+            </section>
+        </div>
+
+        <!-- Tutorial Section (initially shown) -->
+        <section id="tutorialSection" class="bg-white rounded-lg shadow-md p-6 mb-8 border-l-4 border-yellow-500">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Hướng dẫn sử dụng công cụ</h2>
+            <p class="text-gray-600 mb-6">Sử dụng công cụ này để phân tích và so sánh phương án vay vốn từ 6 ngân hàng đối tác cho dự án The Privé.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-blue-50 rounded-lg p-4 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mb-3">
+                        <i class="fas fa-money-bill-wave text-xl"></i>
+                    </div>
+                    <h3 class="font-medium text-gray-800 mb-2">Bước 1: Nhập thông tin tài chính</h3>
+                    <p class="text-gray-600 text-center">Điền vốn ban đầu, doanh thu tháng và giá sản phẩm bạn muốn mua.</p>
+                </div>
+                
+                <div class="bg-blue-50 rounded-lg p-4 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mb-3">
+                        <i class="fas fa-calculator text-xl"></i>
+                    </div>
+                    <h3 class="font-medium text-gray-800 mb-2">Bước 2: Nhấn "Phân tích"</h3>
+                    <p class="text-gray-600 text-center">Hệ thống sẽ tính toán chi tiết phương án vay của 6 ngân hàng khác nhau.</p>
+                </div>
+                
+                <div class="bg-blue-50 rounded-lg p-4 flex flex-col items-center">
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 mb-3">
+                        <i class="fas fa-university text-xl"></i>
+                    </div>
+                    <h3 class="font-medium text-gray-800 mb-2">Bước 3: So sánh và lựa chọn</h3>
+                    <p class="text-gray-600 text-center">So sánh các phương án và xem khuyến nghị để chọn ngân hàng phù hợp nhất.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Banks Policies Section -->
+        <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Chính sách vay của các ngân hàng đối tác</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- LPBank -->
+                <div class="bank-card p-4 rounded-lg border border-gray-200 hover:border-blue-300">
+                    <div class="flex items-center mb-4">
+                        <div class="mr-4">
+                            <span class="font-bold text-lg text-blue-600">LPBank</span>
+                        </div>
+                    </div>
+                    <ul class="space-y-2">
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Giá trị cho vay tối đa: 75% giá trị sản phẩm</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Thế chấp tài sản khác: 100% giá trị sản phẩm</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Thời hạn vay tối đa: 30 năm</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Hỗ trợ lãi suất: 100% trong 24 tháng (Đợt 2)</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Thời gian ân hạn nợ gốc: 36 tháng</li>
+                    </ul>
+                </div>
+                
+                <!-- MB -->
+                <div class="bank-card p-4 rounded-lg border border-gray-200 hover:border-blue-300">
+                    <div class="flex items-center mb-4">
+                        <div class="mr-4">
+                            <span class="font-bold text-lg text-blue-600">MB</span>
+                        </div>
+                    </div>
+                    <ul class="space-y-2">
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Giá trị cho vay tối đa: 70% giá trị sản phẩm</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Thế chấp tài sản khác: 100% giá trị sản phẩm</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Thời hạn vay tối đa: 35 năm</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Hỗ trợ lãi suất: 100% trong 24 tháng (Đợt 2)</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Thời gian ân hạn nợ gốc: 60 tháng</li>
+                    </ul>
+                </div>
+                
+                <!-- TPBank -->
+                <div class="bank-card p-4 rounded-lg border border-gray-200 hover:border-blue-300">
+                    <div class="flex items-center mb-4">
+                        <div class="mr-4">
+                            <span class="font-bold text-lg text-blue-600">TPBank</span>
+                        </div>
+                    </div>
+                    <ul class="space-y-2">
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Giá trị cho vay tối đa: 75% giá trị sản phẩm</li>
+                        <li><i class="fas fa-times-circle text-red-500 mr-2"></i>Không đề cập thế chấp tài sản khác</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Thời hạn vay tối đa: 30 năm</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Hỗ trợ lãi suất: 100% trong 24 tháng (Đợt 4)</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Thời gian ân hạn nợ gốc: 36 tháng</li>
+                    </ul>
+                </div>
+                
+                <!-- VCB -->
+                <div class="bank-card p-4 rounded-lg border border-gray-200 hover:border-blue-300">
+                    <div class="flex items-center mb-4">
+                        <div class="mr-4">
+                            <span class="font-bold text-lg text-blue-600">VCB</span>
+                        </div>
+                    </div>
+                    <ul class="space-y-2">
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Giá trị cho vay tối đa: 70% giá trị sản phẩm</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Thế chấp tài sản khác: 100% giá trị sản phẩm</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Thời hạn vay tối đa: 30 năm</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Hỗ trợ lãi suất: 100% trong 24 tháng (Đợt 4)</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Thời gian ân hạn nợ gốc: 24 tháng</li>
+                    </ul>
+                </div>
+                
+                <!-- Vietinbank -->
+                <div class="bank-card p-4 rounded-lg border border-gray-200 hover:border-blue-300">
+                    <div class="flex items-center mb-4">
+                        <div class="mr-4">
+                            <span class="font-bold text-lg text-blue-600">Vietinbank</span>
+                        </div>
+                    </div>
+                    <ul class="space-y-2">
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Giá trị cho vay tối đa: 70% giá trị sản phẩm</li>
+                        <li><i class="fas fa-times-circle text-red-500 mr-2"></i>Không đề cập thế chấp tài sản khác</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Thời hạn vay: 25 năm</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Hỗ trợ lãi suất: 100% trong 24 tháng (Đợt 4)</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Thời gian ân hạn nợ gốc: 24 tháng</li>
+                    </ul>
+                </div>
+                
+                <!-- MBV -->
+                <div class="bank-card p-4 rounded-lg border border-gray-200 hover:border-blue-300">
+                    <div class="flex items-center mb-4">
+                        <div class="mr-4">
+                            <span class="font-bold text-lg text-blue-600">MBV</span>
+                        </div>
+                    </div>
+                    <ul class="space-y-2">
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Giá trị cho vay tối đa: 70% giá trị sản phẩm</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Thế chấp tài sản khác: 85% giá trị sản phẩm</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Thời hạn vay tối đa: 35 năm</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Hỗ trợ lãi suất: 100% trong 24 tháng (Đợt 2)</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Thời gian ân hạn nợ gốc: 60 tháng (có nguồn đề cập 48 tháng)</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">The Privé</h3>
+                    <p class="text-gray-300">Module Tính Toán & Phân Tích Phương Án Vay Vốn dành riêng cho khách hàng dự án The Privé.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Lưu ý quan trọng</h3>
+                    <ul class="text-gray-300 space-y-2">
+                        <li>Thông tin chỉ mang tính chất tham khảo</li>
+                        <li>Khoản vay thực tế sẽ được ngân hàng thẩm định</li>
+                        <li>Lãi suất sau thời gian hỗ trợ có thể thay đổi</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Liên hệ hỗ trợ</h3>
+                    <p class="text-gray-300">Liên hệ nhân viên tư vấn để được hỗ trợ chi tiết về phương án vay vốn phù hợp với bạn.</p>
+                </div>
+            </div>
+            <div class="mt-8 pt-6 border-t border-gray-700 text-center text-gray-400">
+                <p>© 2025 The Privé. Bản quyền thuộc về đại lý chiến lược OneS.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script>
+        // Bank data
+        const bankData = {
+            lpbank: {
+                name: "LPBank",
+                maxLoanRatio: 75,
+                maxLoanRatioWithCollateral: 100,
+                maxLoanTerm: 30,
+                interestSupportPeriod: 24,
+                gracePeriod: 36,
+                disbursementPhase: 2
+            },
+            mb: {
+                name: "MB",
+                maxLoanRatio: 70,
+                maxLoanRatioWithCollateral: 100,
+                maxLoanTerm: 35,
+                interestSupportPeriod: 24,
+                gracePeriod: 60,
+                disbursementPhase: 2
+            },
+            tpbank: {
+                name: "TPBank",
+                maxLoanRatio: 75,
+                maxLoanRatioWithCollateral: 75,
+                maxLoanTerm: 30,
+                interestSupportPeriod: 24,
+                gracePeriod: 36,
+                disbursementPhase: 4
+            },
+            vcb: {
+                name: "VCB",
+                maxLoanRatio: 70,
+                maxLoanRatioWithCollateral: 100,
+                maxLoanTerm: 30,
+                interestSupportPeriod: 24,
+                gracePeriod: 24,
+                disbursementPhase: 4
+            },
+            vietinbank: {
+                name: "Vietinbank",
+                maxLoanRatio: 70,
+                maxLoanRatioWithCollateral: 70,
+                maxLoanTerm: 25,
+                interestSupportPeriod: 24,
+                gracePeriod: 24,
+                disbursementPhase: 4
+            },
+            mbv: {
+                name: "MBV",
+                maxLoanRatio: 70,
+                maxLoanRatioWithCollateral: 85,
+                maxLoanTerm: 35,
+                interestSupportPeriod: 24,
+                gracePeriod: 60,
+                disbursementPhase: 2,
+                note: "có nguồn đề cập 48 tháng"
+            }
+        };
+
+        // Format currency
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
+        }
+
+        // Parse currency input
+        function parseCurrencyInput(input) {
+            if (!input) return 0;
+            return parseInt(input.replace(/[^\d]/g, '')) || 0;
+        }
+
+        // Format inputs as currency
+        document.querySelectorAll('#loanForm input[type="text"]').forEach(input => {
+            input.addEventListener('blur', function() {
+                const value = parseCurrencyInput(this.value);
+                if (value > 0) {
+                    this.value = formatCurrency(value).replace('₫', '').trim();
+                }
+            });
+            
+            input.addEventListener('focus', function() {
+                this.value = this.value.replace(/[^\d]/g, '');
+            });
+        });
+
+        // Calculate monthly payment (basic amortization formula)
+        function calculateMonthlyPayment(principal, annualInterestRate, loanTermYears) {
+            const monthlyInterestRate = annualInterestRate / 12 / 100;
+            const numberOfPayments = loanTermYears * 12;
+            
+            if (monthlyInterestRate === 0) return principal / numberOfPayments;
+            
+            return principal * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments) / (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
+        }
+
+        // Analyze financial situation
+        function analyzeFinancialSituation(initialCapital, propertyPrice, monthlyIncome) {
+            const capitalRatio = (initialCapital / propertyPrice) * 100;
+            let capitalStatus, capitalSituation, incomeStatus, recommendation;
+            
+            // Capital analysis
+            if (capitalRatio >= 40) {
+                capitalStatus = "cao";
+                capitalSituation = `Với vốn tự có cao (${capitalRatio.toFixed(1)}% giá trị căn hộ), bạn có thể đàm phán điều kiện vay tốt hơn và không cần vay tối đa.`;
+                recommendation = "VCB, Vietinbank";
+            } else if (capitalRatio >= 25) {
+                capitalStatus = "trung bình";
+                capitalSituation = `Với vốn tự có trung bình (${capitalRatio.toFixed(1)}% giá trị căn hộ), bạn nên tận dụng các chính sách hỗ trợ lãi suất và ân hạn nợ gốc dài.`;
+                recommendation = "LPBank, TPBank";
+            } else {
+                capitalStatus = "thấp";
+                capitalSituation = `Với vốn tự có thấp (${capitalRatio.toFixed(1)}% giá trị căn hộ), bạn nên ưu tiên ngân hàng có thời gian ân hạn nợ gốc dài nhất.`;
+                recommendation = "MB, MBV";
+            }
+            
+            // Income analysis
+            const estimatedMonthlyPayment = calculateMonthlyPayment(propertyPrice * 0.7, 10, 25); // Rough estimate
+            const incomeRatio = (estimatedMonthlyPayment / monthlyIncome) * 100;
+            
+            if (incomeRatio <= 30) {
+                incomeStatus = `Thu nhập của bạn cao (khoản vay dự kiến chiếm ${incomeRatio.toFixed(1)}% thu nhập). Bạn có khả năng trả các khoản vay dễ dàng.`;
+            } else if (incomeRatio <= 50) {
+                incomeStatus = `Thu nhập của bạn khá (khoản vay dự kiến chiếm ${incomeRatio.toFixed(1)}% thu nhập). Cần cân nhắc chi tiêu hàng tháng.`;
+            } else {
+                incomeStatus = `Thu nhập của bạn có thể gặp khó khăn khi trả khoản vay (dự kiến chiếm ${incomeRatio.toFixed(1)}% thu nhập). Cần cân nhắc giảm số tiền vay.`;
+            }
+            
+            // Determine best bank
+            let bestBank = "";
+            if (capitalRatio >= 40) {
+                // High capital
+                bestBank = "VCB";
+            } else if (capitalRatio >= 25) {
+                // Medium capital
+                bestBank = incomeRatio > 40 ? "LPBank" : "TPBank";
+            } else {
+                // Low capital
+                bestBank = "MB";
+            }
+            
+            return {
+                capitalStatus,
+                capitalSituation,
+                incomeStatus,
+                recommendation,
+                bestBank,
+                incomeRatio
+            };
+        }
+
+        // Generate strategy recommendations based on analysis
+        function generateStrategyRecommendations(analysis, propertyPrice) {
+            const strategies = [];
+            
+            if (analysis.capitalStatus === "cao") {
+                strategies.push(`Thanh toán trước 40-50% giá trị căn hộ từ vốn tự có`);
+                strategies.push(`Vay 50-60% từ ngân hàng ${analysis.bestBank} để tối ưu lợi nhuận`);
+                strategies.push("Tận dụng thời gian hỗ trợ lãi suất để đầu tư vốn tự có vào các kênh sinh lời khác");
+            } else if (analysis.capitalStatus === "trung bình") {
+                strategies.push(`Thanh toán đúng tỷ lệ tối thiểu (25-30%) từ vốn tự có`);
+                strategies.push(`Vay tối đa có thể (70-75%) từ ngân hàng ${analysis.bestBank}`);
+                strategies.push("Tận dụng tối đa thời gian ân hạn nợ gốc để có thời gian tích lũy thêm");
+            } else {
+                strategies.push(`Vay tối đa có thể từ ngân hàng ${analysis.bestBank} với thời gian ân hạn dài nhất`);
+                strategies.push("Cân nhắc thế chấp thêm tài sản khác nếu cần thiết");
+                strategies.push("Xem xét tăng thu nhập hoặc giảm chi phí trong thời gian ân hạn để chuẩn bị cho giai đoạn trả nợ");
+            }
+            
+            if (analysis.incomeRatio > 50) {
+                strategies.push("Cân nhắc kỹ về khả năng trả nợ dài hạn sau thời gian ân hạn");
+            }
+            
+            return strategies;
+        }
+
+        // Calculate button click handler
+        document.getElementById('calculateButton').addEventListener('click', function() {
+            const initialCapital = parseCurrencyInput(document.getElementById('initialCapital').value);
+            const monthlyIncome = parseCurrencyInput(document.getElementById('monthlyIncome').value);
+            const propertyPrice = parseCurrencyInput(document.getElementById('propertyPrice').value);
+            
+            if (!initialCapital || !monthlyIncome || !propertyPrice) {
+                alert('Vui lòng nhập đầy đủ thông tin về vốn ban đầu, doanh thu tháng và giá sản phẩm.');
+                return;
+            }
+            
+            // Update overview section
+            document.getElementById('overview-initial-capital').textContent = formatCurrency(initialCapital);
+            document.getElementById('overview-capital-percent').textContent = `${((initialCapital / propertyPrice) * 100).toFixed(2)}% giá trị sản phẩm`;
+            
+            document.getElementById('overview-max-loan').textContent = formatCurrency(propertyPrice * 0.75); // Max possible value
+            document.getElementById('overview-loan-percent').textContent = `75% giá trị sản phẩm`;
+            
+            document.getElementById('overview-property-price').textContent = formatCurrency(propertyPrice);
+            
+            // Financial situation analysis
+            const analysis = analyzeFinancialSituation(initialCapital, propertyPrice, monthlyIncome);
+            document.getElementById('capital-status').textContent = analysis.capitalStatus;
+            document.getElementById('finance-summary').innerHTML = `Dựa trên thông tin bạn cung cấp, bạn thuộc nhóm khách hàng có vốn tự có <span class="font-medium">${analysis.capitalStatus}</span>.`;
+            
+            document.getElementById('best-bank').textContent = analysis.bestBank;
+            document.getElementById('bank-recommendation').innerHTML = `Chúng tôi khuyến nghị bạn nên lựa chọn <span class="font-medium">${analysis.bestBank}</span> với thời gian ân hạn dài và điều kiện vay linh hoạt.`;
+            
+            document.getElementById('capital-analysis').textContent = analysis.capitalSituation;
+            document.getElementById('income-analysis').textContent = analysis.incomeStatus;
+            
+            // Generate strategy recommendations
+            const strategies = generateStrategyRecommendations(analysis, propertyPrice);
+            const strategyList = document.getElementById('strategy-recommendations');
+            strategyList.innerHTML = '';
+            strategies.forEach(strategy => {
+                const li = document.createElement('li');
+                li.textContent = strategy;
+                strategyList.appendChild(li);
+            });
+            
+            // Fill bank comparison table
+            const bankComparisonTable = document.getElementById('bank-comparison');
+            bankComparisonTable.innerHTML = '';
+            
+            Object.keys(bankData).forEach(bankKey => {
+                const bank = bankData[bankKey];
+                const row = document.createElement('tr');
+                row.classList.add('hover:bg-gray-50');
+                
+                const maxLoan = propertyPrice * (bank.maxLoanRatio / 100);
+                
+                row.innerHTML = `
+                    <td class="py-3 px-4 border-b">${bank.name}</td>
+                    <td class="py-3 px-4 border-b">${bank.maxLoanRatio}% (${bank.maxLoanRatioWithCollateral}% với tài sản khác)</td>
+                    <td class="py-3 px-4 border-b">${bank.interestSupportPeriod} tháng (Đợt ${bank.disbursementPhase})</td>
+                    <td class="py-3 px-4 border-b">${bank.gracePeriod} tháng ${bank.note ? `(${bank.note})` : ''}</td>
+                    <td class="py-3 px-4 border-b">${bank.maxLoanTerm} năm</td>
+                    <td class="py-3 px-4 border-b">${formatCurrency(maxLoan)}</td>
+                `;
+                
+                bankComparisonTable.appendChild(row);
+            });
+            
+            // Show first bank detail
+            showBankDetail('lpbank');
+            
+            // Hide tutorial, show results
+            document.getElementById('tutorialSection').classList.add('hidden');
+            document.getElementById('resultsSection').classList.remove('hidden');
+        });
+
+        // Bank tab click handler
+        document.querySelectorAll('.bank-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                const bankId = this.getAttribute('data-bank');
+                
+                // Update active tab
+                document.querySelectorAll('.bank-tab').forEach(t => {
+                    t.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
+                    t.classList.add('text-gray-500');
+                });
+                
+                this.classList.remove('text-gray-500');
+                this.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+                
+                showBankDetail(bankId);
+            });
+        });
+
+        // Show bank detail
+        function showBankDetail(bankId) {
+            const bank = bankData[bankId];
+            const bankContent = document.getElementById('bank-content');
+            
+            const initialCapital = parseCurrencyInput(document.getElementById('initialCapital').value);
+            const monthlyIncome = parseCurrencyInput(document.getElementById('monthlyIncome').value);
+            const propertyPrice = parseCurrencyInput(document.getElementById('propertyPrice').value);
+            
+            const maxLoan = propertyPrice * (bank.maxLoanRatio / 100);
+            const minDownPayment = propertyPrice - maxLoan;
+            const capitalStatus = initialCapital >= minDownPayment ? 'Đủ' : 'Không đủ';
+            const capitalDifference = initialCapital - minDownPayment;
+            
+            // Reference interest rate for calculation after the support period
+            const referenceRate = 10; // 10% annual interest rate as an example
+            
+            // Calculate monthly payment for different periods
+            const monthlyPaymentAfterAll = calculateMonthlyPayment(maxLoan, referenceRate, bank.maxLoanTerm);
+            const incomeRatio = (monthlyPaymentAfterAll / monthlyIncome) * 100;
+            
+            bankContent.innerHTML = `
+                <h3 class="text-2xl font-bold text-blue-600 mb-6">${bank.name} - Phân Tích Phương Án Vay Vốn</h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold text-gray-800 mb-2">Thông tin khoản vay tối đa</h4>
+                            <ul class="bg-blue-50 rounded-lg p-4 space-y-2">
+                                <li><span class="font-medium">Tỷ lệ cho vay tối đa:</span> ${bank.maxLoanRatio}% giá trị sản phẩm ${bank.maxLoanRatioWithCollateral > bank.maxLoanRatio ? `(${bank.maxLoanRatioWithCollateral}% nếu thế chấp tài sản khác)` : ''}</li>
+                                <li><span class="font-medium">Thời hạn vay tối đa:</span> ${bank.maxLoanTerm} năm</li>
+                                <li><span class="font-medium">Khoản vay tối đa ước tính:</span> ${formatCurrency(maxLoan)}</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold text-gray-800 mb-2">Ước tính thanh toán ban đầu</h4>
+                            <ul class="bg-green-50 rounded-lg p-4 space-y-2">
+                                <li><span class="font-medium">Khoản cần thanh toán tối thiểu từ vốn tự có:</span> ${formatCurrency(minDownPayment)} (${(100 - bank.maxLoanRatio)}% giá trị sản phẩm)</li>
+                                <li><span class="font-medium">Vốn ban đầu của bạn:</span> ${formatCurrency(initialCapital)}</li>
+                                <li><span class="font-medium">Đánh giá:</span> <span class="${capitalStatus === 'Đủ' ? 'text-green-600' : 'text-red-600'} font-medium">${capitalStatus}</span> để thanh toán phần không vay tối thiểu</li>
+                                <li><span class="font-medium">Chênh lệch:</span> <span class="${capitalDifference >= 0 ? 'text-green-600' : 'text-red-600'} font-medium">${formatCurrency(Math.abs(capitalDifference))}</span> ${capitalDifference >= 0 ? 'dư' : 'thiếu'}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold text-gray-800 mb-2">Chính sách hỗ trợ lãi suất & ân hạn</h4>
+                            <ul class="bg-purple-50 rounded-lg p-4 space-y-2">
+                                <li><span class="font-medium">Ngân hàng giải ngân cho Đợt:</span> <span class="text-purple-600 font-medium">Đợt ${bank.disbursementPhase}</span> theo Phương thức thanh toán của Chủ Đầu tư</li>
+                                <li><span class="font-medium">Hỗ trợ lãi suất:</span> Chủ Đầu tư hỗ trợ <span class="text-purple-600 font-medium">100% lãi vay</span> cho khoản giải ngân Đợt ${bank.disbursementPhase}</li>
+                                <li><span class="font-medium">Thời gian hỗ trợ lãi suất:</span> <span class="text-purple-600 font-medium">${bank.interestSupportPeriod} tháng</span> kể từ ngày giải ngân đầu tiên</li>
+                                <li><span class="font-medium">Thời gian ân hạn nợ gốc tối đa:</span> <span class="text-purple-600 font-medium">${bank.gracePeriod} tháng</span> ${bank.note ? `(${bank.note})` : ''}</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <h4 class="text-lg font-semibold text-gray-800 mb-2">Đánh giá khả năng chi trả</h4>
+                            <ul class="bg-yellow-50 rounded-lg p-4 space-y-2">
+                                <li><span class="font-medium">Doanh thu tháng:</span> ${formatCurrency(monthlyIncome)}</li>
+                                <li><span class="font-medium">Khoản trả hàng tháng sau thời gian ưu đãi:</span> ${formatCurrency(monthlyPaymentAfterAll)} (ước tính với lãi suất tham khảo ${referenceRate}%/năm)</li>
+                                <li><span class="font-medium">Tỷ lệ khoản vay/thu nhập:</span> <span class="${incomeRatio <= 40 ? 'text-green-600' : incomeRatio <= 60 ? 'text-yellow-600' : 'text-red-600'} font-medium">${incomeRatio.toFixed(1)}%</span> thu nhập hàng tháng</li>
+                                <li><span class="font-medium">Đánh giá:</span> <span class="${incomeRatio <= 40 ? 'text-green-600' : incomeRatio <= 60 ? 'text-yellow-600' : 'text-red-600'} font-medium">${incomeRatio <= 40 ? 'Tốt' : incomeRatio <= 60 ? 'Cần cân nhắc' : 'Rủi ro cao'}</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">Kế hoạch thanh toán minh họa</h4>
+                    <div class="bg-white rounded-lg border border-gray-200 p-4">
+                        <div class="overflow-x-auto">
+                            <table class="min-w-full border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-100">
+                                        <th class="py-3 px-4 text-left border">Giai đoạn</th>
+                                        <th class="py-3 px-4 text-left border">Thời gian</th>
+                                        <th class="py-3 px-4 text-left border">Gốc hàng tháng</th>
+                                        <th class="py-3 px-4 text-left border">Lãi hàng tháng</th>
+                                        <th class="py-3 px-4 text-left border">Khoản trả hàng tháng</th>
+                                        <th class="py-3 px-4 text-left border">Ghi chú</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Phase 1: Interest support & Grace period -->
+                                    <tr class="bg-blue-50">
+                                        <td class="py-3 px-4 border">Giai đoạn 1</td>
+                                        <td class="py-3 px-4 border">Tháng 1-${Math.min(bank.interestSupportPeriod, bank.gracePeriod)}</td>
+                                        <td class="py-3 px-4 border">0 VNĐ</td>
+                                        <td class="py-3 px-4 border">0 VNĐ (hỗ trợ 100%)</td>
+                                        <td class="py-3 px-4 border font-medium">0 VNĐ</td>
+                                        <td class="py-3 px-4 border">Ân hạn nợ gốc & Hỗ trợ lãi suất</td>
+                                    </tr>
+                                    
+                                    ${bank.gracePeriod < bank.interestSupportPeriod ? `
+                                    <!-- Phase 2: After Grace Period, still in Interest Support Period -->
+                                    <tr class="bg-green-50">
+                                        <td class="py-3 px-4 border">Giai đoạn 2</td>
+                                        <td class="py-3 px-4 border">Tháng ${bank.gracePeriod + 1}-${bank.interestSupportPeriod}</td>
+                                        <td class="py-3 px-4 border">${formatCurrency(maxLoan / (bank.maxLoanTerm * 12 - bank.gracePeriod))}</td>
+                                        <td class="py-3 px-4 border">0 VNĐ (hỗ trợ 100%)</td>
+                                        <td class="py-3 px-4 border font-medium">${formatCurrency(maxLoan / (bank.maxLoanTerm * 12 - bank.gracePeriod))}</td>
+                                        <td class="py-3 px-4 border">Trả gốc, lãi được hỗ trợ</td>
+                                    </tr>
+                                    ` : ''}
+                                    
+                                    ${bank.gracePeriod > bank.interestSupportPeriod ? `
+                                    <!-- Phase 2: After Interest Support, still in Grace Period -->
+                                    <tr class="bg-yellow-50">
+                                        <td class="py-3 px-4 border">Giai đoạn 2</td>
+                                        <td class="py-3 px-4 border">Tháng ${bank.interestSupportPeriod + 1}-${bank.gracePeriod}</td>
+                                        <td class="py-3 px-4 border">0 VNĐ</td>
+                                        <td class="py-3 px-4 border">${formatCurrency(maxLoan * (referenceRate/100) / 12)}</td>
+                                        <td class="py-3 px-4 border font-medium">${formatCurrency(maxLoan * (referenceRate/100) / 12)}</td>
+                                        <td class="py-3 px-4 border">Chỉ trả lãi, ân hạn nợ gốc</td>
+                                    </tr>
+                                    ` : ''}
+                                    
+                                    <!-- Phase 3: After Interest Support & Grace Period -->
+                                    <tr>
+                                        <td class="py-3 px-4 border">Giai đoạn 3</td>
+                                        <td class="py-3 px-4 border">Tháng ${Math.max(bank.interestSupportPeriod, bank.gracePeriod) + 1}-${bank.maxLoanTerm * 12}</td>
+                                        <td class="py-3 px-4 border" colspan="2">Gốc + lãi theo lịch trả nợ của ngân hàng</td>
+                                        <td class="py-3 px-4 border font-medium">${formatCurrency(monthlyPaymentAfterAll)}</td>
+                                        <td class="py-3 px-4 border">Ước tính với lãi suất ${referenceRate}%/năm</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="mt-4 text-sm text-gray-500 italic">* Lưu ý: Lãi suất sau thời gian hỗ trợ là ước tính với lãi suất tham khảo ${referenceRate}%/năm và có thể thay đổi theo thị trường.</p>
+                    </div>
+                </div>
+                
+                <div class="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-100">
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2"><i class="fas fa-lightbulb mr-2 text-yellow-500"></i>Nhận xét riêng cho ${bank.name}</h4>
+                    <div class="text-gray-700">
+                        ${
+                            bank.gracePeriod === 60 ? 
+                            `<p>Đây là ngân hàng có thời gian ân hạn nợ gốc dài nhất (${bank.gracePeriod} tháng), rất phù hợp với khách hàng cần tối ưu dòng tiền ngắn hạn. Tuy nhiên bạn cần lập kế hoạch tích lũy để sẵn sàng cho giai đoạn trả nợ sau thời gian ân hạn.</p>` 
+                            :
+                            bank.disbursementPhase === 2 ?
+                            `<p>${bank.name} hỗ trợ lãi suất cho Đợt 2 (sớm hơn), giúp bạn giảm áp lực tài chính trong giai đoạn đầu của khoản vay. Thời gian ân hạn nợ gốc ${bank.gracePeriod} tháng ${bank.gracePeriod > 24 ? 'tương đối dài' : 'tương đối ngắn'}.</p>` 
+                            : 
+                            `<p>${bank.name} hỗ trợ lãi suất cho Đợt 4 (muộn hơn), phù hợp với khách hàng muốn tận dụng hỗ trợ lãi suất gần với thời điểm bàn giao nhà. Thời gian ân hạn nợ gốc ${bank.gracePeriod} tháng ${bank.gracePeriod > 24 ? 'tương đối dài' : 'tương đối ngắn'}.</p>`
+                        }
+                        <p class="mt-2">Với thu nhập hàng tháng của bạn (${formatCurrency(monthlyIncome)}), khoản trả hàng tháng sau thời gian ưu đãi ước tính chiếm <span class="${incomeRatio <= 40 ? 'text-green-600' : incomeRatio <= 60 ? 'text-yellow-600' : 'text-red-600'} font-medium">${incomeRatio.toFixed(1)}%</span> thu nhập, được đánh giá là <span class="${incomeRatio <= 40 ? 'text-green-600' : incomeRatio <= 60 ? 'text-yellow-600' : 'text-red-600'} font-medium">${incomeRatio <= 40 ? 'ở mức an toàn' : incomeRatio <= 60 ? 'cần cân nhắc kỹ khả năng chi trả' : 'có rủi ro cao về khả năng chi trả'}</span>.</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Show/hide detailed recommendations
+        document.getElementById('showDetailedRecommendations').addEventListener('click', function() {
+            const content = document.getElementById('detailedRecommendations');
+            content.classList.toggle('open');
+            
+            const icon = this.querySelector('i');
+            if (content.classList.contains('open')) {
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
+        });
+    </script>
+</body>
+</html>
