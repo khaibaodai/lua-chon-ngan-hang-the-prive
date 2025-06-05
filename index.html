@@ -1,3 +1,4 @@
+Copy
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -55,9 +56,9 @@
             padding-left: 1rem;
         }
         .chart-container {
-            height: 300px;
+            height: 400px;
         }
-        @media print {
+         {
             body {
                 width: 100%;
                 margin: 0;
@@ -86,6 +87,22 @@
         .collapsible-content.open {
             max-height: 2000px;
         }
+        .phase-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .phase-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .phase-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gray-50">
@@ -95,7 +112,7 @@
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="text-center md:text-left mb-4 md:mb-0">
                     <h1 class="text-3xl font-bold">The Privé</h1>
-                    <p class="text-blue-100">Module Tính Toán & Phân Tích Phương Án Vay Vốn by OneS</p>
+                    <p class="text-blue-100">Module Tính Toán & Phân Tích Phương Án Vay Vốn - OneS</p>
                 </div>
                 <div class="flex items-center space-x-4">
                     <div class="bg-white bg-opacity-20 rounded-lg px-4 py-2">
@@ -129,7 +146,7 @@
                 </div>
                 
                 <div class="input-group">
-                    <label for="monthlyIncome" class="block text-gray-700 font-medium mb-2">Thu nhập tháng (VNĐ)</label>
+                    <label for="monthlyIncome" class="block text-gray-700 font-medium mb-2">Doanh thu tháng (VNĐ)</label>
                     <input type="text" id="monthlyIncome" name="monthlyIncome" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="50,000,000">
                     <span>VNĐ</span>
                 </div>
@@ -172,6 +189,117 @@
                 </div>
             </section>
 
+            <!-- Cash Flow Analysis Chart -->
+            <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-chart-line mr-2 text-blue-600"></i>
+                    Phân tích Khoản Trả Nợ Hàng Tháng
+                </h2>
+                <p class="text-gray-600 mb-6">Biểu đồ so sánh khoản thanh toán hàng tháng của 6 ngân hàng qua các giai đoạn khác nhau.</p>
+                
+                <!-- Phase Legend -->
+                <div class="phase-legend">
+                    <div class="phase-legend-item">
+                        <div class="phase-color" style="background-color: #E8F4FD;"></div>
+                        <span class="text-sm text-gray-700">Giai đoạn 1: Ân hạn + Hỗ trợ lãi suất (0 VNĐ/tháng)</span>
+                    </div>
+                    <div class="phase-legend-item">
+                        <div class="phase-color" style="background-color: #FFF4E6;"></div>
+                        <span class="text-sm text-gray-700">Giai đoạn 2: Sau ân hạn, còn hỗ trợ lãi suất (chỉ trả gốc)</span>
+                    </div>
+                    <div class="phase-legend-item">
+                        <div class="phase-color" style="background-color: #FFE6E6;"></div>
+                        <span class="text-sm text-gray-700">Giai đoạn 3: Trả nợ bình thường (gốc + lãi)</span>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="cashFlowChart"></canvas>
+                </div>
+                
+                <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                    <h4 class="font-semibold text-gray-800 mb-2">Nhận xét từ biểu đồ:</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+                        <div>
+                            <p><strong>Ân hạn dài nhất (60 tháng):</strong> MB, MBV</p>
+                            <p><strong>Ân hạn trung bình (36 tháng):</strong> LPBank, TPBank</p>
+                            <p><strong>Ân hạn ngắn nhất (24 tháng):</strong> VCB, Vietinbank</p>
+                        </div>
+                        <div>
+                            <p><strong>Hỗ trợ lãi suất Đợt 2:</strong> LPBank, MB</p>
+                            <p><strong>Hỗ trợ lãi suất Đợt 4:</strong> TPBank, VCB, Vietinbank, MBV</p>
+                            <p><strong>Thời gian hỗ trợ:</strong> Tất cả 24 tháng</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Customer Payment Chart -->
+            <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-user mr-2 text-blue-600"></i>
+                    Phân tích Dòng Tiền Chi Trả Vốn Tự Có
+                </h2>
+                <p class="text-gray-600 mb-6">Biểu đồ hiển thị số tiền khách hàng cần đóng từ vốn tự có theo thời gian của 6 ngân hàng.</p>
+                
+                <div class="chart-container">
+                    <canvas id="customerPaymentChart"></canvas>
+                </div>
+                
+                <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                    <h4 class="font-semibold text-gray-800 mb-2">Nhận xét từ biểu đồ vốn tự có:</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+                        <div>
+                            <p><strong>Vốn tự có ít nhất (25%):</strong> LPBank, TPBank</p>
+                            <p><strong>Vốn tự có nhiều hơn (30%):</strong> MB, VCB, Vietinbank, MBV</p>
+                        </div>
+                        <div>
+                            <p><strong>Lịch thanh toán:</strong> Mỗi ngân hàng có cách phân bổ khác nhau</p>
+                            <p><strong>Lưu ý:</strong> Cần chuẩn bị vốn theo từng đợt thanh toán</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Bank Disbursement Chart -->
+            <section class="bg-white rounded-lg shadow-md p-6 mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">
+                    <i class="fas fa-university mr-2 text-green-600"></i>
+                    Phân tích Dòng Tiền Ngân Hàng Giải Ngân
+                </h2>
+                <p class="text-gray-600 mb-6">Biểu đồ hiển thị số tiền ngân hàng giải ngân theo thời gian của 6 ngân hàng.</p>
+                
+                <!-- Bank Disbursement Legend -->
+                <div class="phase-legend">
+                    <div class="phase-legend-item">
+                        <div class="phase-color" style="background-color: #10B981;"></div>
+                        <span class="text-sm text-gray-700">Nhóm giải ngân Đợt 2 (LPBank, MB)</span>
+                    </div>
+                    <div class="phase-legend-item">
+                        <div class="phase-color" style="background-color: #F59E0B;"></div>
+                        <span class="text-sm text-gray-700">Nhóm giải ngân Đợt 4 (TPBank, VCB, Vietinbank, MBV)</span>
+                    </div>
+                </div>
+                
+                <div class="chart-container">
+                    <canvas id="bankDisbursementChart"></canvas>
+                </div>
+                
+                <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                    <h4 class="font-semibold text-gray-800 mb-2">Nhận xét từ biểu đồ giải ngân ngân hàng:</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700">
+                        <div>
+                            <p><strong>Giải ngân sớm (Đợt 2):</strong> LPBank, MB - Hỗ trợ tài chính từ giai đoạn đầu</p>
+                            <p><strong>Giải ngân muộn (Đợt 4):</strong> TPBank, VCB, Vietinbank, MBV - Có thời gian chuẩn bị</p>
+                        </div>
+                        <div>
+                            <p><strong>Lợi ích Đợt 2:</strong> Giảm áp lực tài chính sớm cho khách hàng</p>
+                            <p><strong>Lợi ích Đợt 4:</strong> Khách hàng có thêm thời gian chuẩn bị vốn</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Recommendation Section -->
             <section class="bg-white rounded-lg shadow-md p-6 mb-8 recommendation-section">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Khuyến nghị và Nhận xét</h2>
@@ -202,8 +330,8 @@
                             
                             <h4 class="font-semibold text-gray-800 mb-2">Chiến lược đề xuất</h4>
                             <ul class="list-disc pl-6 text-gray-700 space-y-2 mb-4" id="strategy-recommendations">
-                                <li>Thanh toán trước 40% giá trị căn hộ từ vốn tự có</li>
-                                <li>Vay 60% từ ngân hàng MB với thời gian ân hạn 60 tháng</li>
+                                <li>Thanh toán trước từ 30-40% giá trị căn hộ</li>
+                                <li>Vay 60-70% từ ngân hàng MB với thời gian ân hạn 60 tháng</li>
                                 <li>Tận dụng thời gian hỗ trợ lãi suất để đầu tư vốn tự có vào các kênh sinh lời khác</li>
                             </ul>
                             
@@ -390,7 +518,7 @@
                         <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Giá trị cho vay tối đa: 70% giá trị sản phẩm</li>
                         <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Thế chấp tài sản khác: 85% giá trị sản phẩm</li>
                         <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Thời hạn vay tối đa: 35 năm</li>
-                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Hỗ trợ lãi suất: 100% trong 24 tháng (Đợt 2)</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Hỗ trợ lãi suất: 100% trong 24 tháng (Đợt 4)</li>
                         <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Thời gian ân hạn nợ gốc: 60 tháng</li>
                     </ul>
                 </div>
@@ -420,14 +548,14 @@
                 </div>
             </div>
             <div class="mt-8 pt-6 border-t border-gray-700 text-center text-gray-400">
-                <p>© 2025 The Privé. Bản quyền thuộc về đại lý chiến lược OneS.</p>
+                <p>© 2025 The Privé.OneS Đã đăng ký bản quyền.</p>
             </div>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
     <script>
-        // Bank data
+        // Bank data với thông tin phương thức thanh toán chính xác
         const bankData = {
             lpbank: {
                 name: "LPBank",
@@ -436,7 +564,23 @@
                 maxLoanTerm: 30,
                 interestSupportPeriod: 24,
                 gracePeriod: 36,
-                disbursementPhase: 2
+                disbursementPhase: 2,
+                color: '#3B82F6',
+                customerPayment: {
+                    total: 25.0,
+                    timeline: [
+                        { month: 0, percentage: 8.6, label: "T6/2025 - Ký HĐMB" },
+                        { month: 24, percentage: 16.4, label: "T6/2027 - Thông báo bàn giao" }
+                    ]
+                },
+                bankDisbursement: {
+                    total: 75.0,
+                    timeline: [
+                        { month: 1.5, percentage: 61.4, label: "T7/2025 - 45 ngày sau ký HĐMB" },
+                        { month: 24, percentage: 8.6, label: "T6/2027 - Thông báo bàn giao" },
+                        { month: 30, percentage: 5.0, label: "T12/2027 - Giấy chứng nhận" }
+                    ]
+                }
             },
             mb: {
                 name: "MB",
@@ -445,7 +589,24 @@
                 maxLoanTerm: 35,
                 interestSupportPeriod: 24,
                 gracePeriod: 60,
-                disbursementPhase: 2
+                disbursementPhase: 2,
+                color: '#10B981',
+                customerPayment: {
+                    total: 30.0,
+                    timeline: [
+                        { month: 0, percentage: 10.0, label: "T6/2025 - Ký HĐMB" },
+                        { month: 1.5, percentage: 5.0, label: "T7/2025 - 45 ngày sau ký HĐMB" },
+                        { month: 24, percentage: 15.0, label: "T6/2027 - Thông báo bàn giao" }
+                    ]
+                },
+                bankDisbursement: {
+                    total: 70.0,
+                    timeline: [
+                        { month: 1.5, percentage: 55.0, label: "T7/2025 - 45 ngày sau ký HĐMB" },
+                        { month: 24, percentage: 10.0, label: "T6/2027 - Thông báo bàn giao" },
+                        { month: 30, percentage: 5.0, label: "T12/2027 - Giấy chứng nhận" }
+                    ]
+                }
             },
             tpbank: {
                 name: "TPBank",
@@ -454,7 +615,25 @@
                 maxLoanTerm: 30,
                 interestSupportPeriod: 24,
                 gracePeriod: 36,
-                disbursementPhase: 4
+                disbursementPhase: 4,
+                color: '#F59E0B',
+                customerPayment: {
+                    total: 25.0,
+                    timeline: [
+                        { month: 0, percentage: 10.0, label: "T6/2025 - Ký HĐMB" },
+                        { month: 1, percentage: 5.0, label: "T7/2025 - 30 ngày sau ký HĐMB" },
+                        { month: 2, percentage: 5.0, label: "T8/2025 - 30 ngày sau đợt 2" },
+                        { month: 24, percentage: 5.0, label: "T6/2027 - Thông báo bàn giao" }
+                    ]
+                },
+                bankDisbursement: {
+                    total: 75.0,
+                    timeline: [
+                        { month: 3, percentage: 50.0, label: "T9/2025 - 45 ngày sau đợt 3 khách hàng" },
+                        { month: 24, percentage: 20.0, label: "T6/2027 - Thông báo bàn giao" },
+                        { month: 30, percentage: 5.0, label: "T12/2027 - Giấy chứng nhận" }
+                    ]
+                }
             },
             vcb: {
                 name: "VCB",
@@ -463,7 +642,24 @@
                 maxLoanTerm: 30,
                 interestSupportPeriod: 24,
                 gracePeriod: 24,
-                disbursementPhase: 4
+                disbursementPhase: 4,
+                color: '#EF4444',
+                customerPayment: {
+                    total: 30.0,
+                    timeline: [
+                        { month: 0, percentage: 10.0, label: "T6/2025 - Ký HĐMB" },
+                        { month: 1, percentage: 10.0, label: "T7/2025 - 30 ngày sau ký HĐMB" },
+                        { month: 2, percentage: 10.0, label: "T8/2025 - 30 ngày sau đợt 2" }
+                    ]
+                },
+                bankDisbursement: {
+                    total: 70.0,
+                    timeline: [
+                        { month: 3, percentage: 40.0, label: "T9/2025 - 45 ngày sau đợt 3 khách hàng" },
+                        { month: 24, percentage: 25.0, label: "T6/2027 - Thông báo bàn giao" },
+                        { month: 30, percentage: 5.0, label: "T12/2027 - Giấy chứng nhận" }
+                    ]
+                }
             },
             vietinbank: {
                 name: "Vietinbank",
@@ -472,7 +668,24 @@
                 maxLoanTerm: 25,
                 interestSupportPeriod: 24,
                 gracePeriod: 24,
-                disbursementPhase: 4
+                disbursementPhase: 4,
+                color: '#8B5CF6',
+                customerPayment: {
+                    total: 30.0,
+                    timeline: [
+                        { month: 0, percentage: 10.0, label: "T6/2025 - Ký HĐMB" },
+                        { month: 1, percentage: 10.0, label: "T7/2025 - 30 ngày sau ký HĐMB" },
+                        { month: 2, percentage: 10.0, label: "T8/2025 - 30 ngày sau đợt 2" }
+                    ]
+                },
+                bankDisbursement: {
+                    total: 70.0,
+                    timeline: [
+                        { month: 3, percentage: 40.0, label: "T9/2025 - 45 ngày sau đợt 3 khách hàng" },
+                        { month: 24, percentage: 25.0, label: "T6/2027 - Thông báo bàn giao" },
+                        { month: 30, percentage: 5.0, label: "T12/2027 - Giấy chứng nhận" }
+                    ]
+                }
             },
             mbv: {
                 name: "MBV",
@@ -481,10 +694,31 @@
                 maxLoanTerm: 35,
                 interestSupportPeriod: 24,
                 gracePeriod: 60,
-                disbursementPhase: 2,
-                note: ""
+                disbursementPhase: 4,
+                color: '#EC4899',
+                customerPayment: {
+                    total: 30.0,
+                    timeline: [
+                        { month: 0, percentage: 10.0, label: "T6/2025 - Ký HĐMB" },
+                        { month: 1, percentage: 5.0, label: "T7/2025 - 30 ngày sau ký HĐMB" },
+                        { month: 2, percentage: 5.0, label: "T8/2025 - 30 ngày sau đợt 2" },
+                        { month: 24, percentage: 10.0, label: "T6/2027 - Thông báo bàn giao" }
+                    ]
+                },
+                bankDisbursement: {
+                    total: 70.0,
+                    timeline: [
+                        { month: 3, percentage: 50.0, label: "T9/2025 - 45 ngày sau đợt 3 khách hàng" },
+                        { month: 24, percentage: 15.0, label: "T6/2027 - Thông báo bàn giao" },
+                        { month: 30, percentage: 5.0, label: "T12/2027 - Giấy chứng nhận" }
+                    ]
+                }
             }
         };
+
+        let cashFlowChart = null;
+        let customerPaymentChart = null;
+        let bankDisbursementChart = null;
 
         // Format currency
         function formatCurrency(value) {
@@ -519,6 +753,424 @@
             if (monthlyInterestRate === 0) return principal / numberOfPayments;
             
             return principal * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfPayments) / (Math.pow(1 + monthlyInterestRate, numberOfPayments) - 1);
+        }
+
+        // Generate cash flow data for chart
+        function generateCashFlowData(propertyPrice) {
+            const referenceRate = 10; // 10% annual interest rate
+            const maxMonths = 84; // 7 years for visualization
+            const datasets = [];
+            
+            Object.keys(bankData).forEach(bankKey => {
+                const bank = bankData[bankKey];
+                const maxLoan = propertyPrice * (bank.maxLoanRatio / 100);
+                const monthlyData = [];
+                
+                // Generate data for each month
+                for (let month = 1; month <= maxMonths; month++) {
+                    let payment = 0;
+                    
+                    // Phase 1: Within grace period AND interest support period
+                    if (month <= Math.min(bank.gracePeriod, bank.interestSupportPeriod)) {
+                        payment = 0; // Both principal and interest are 0
+                    }
+                    // Phase 2: After grace period but still in interest support period
+                    else if (month <= bank.interestSupportPeriod && month > bank.gracePeriod) {
+                        // Only principal payment, no interest
+                        const remainingMonths = bank.maxLoanTerm * 12 - bank.gracePeriod;
+                        payment = maxLoan / remainingMonths;
+                    }
+                    // Phase 3: After interest support period but still in grace period
+                    else if (month <= bank.gracePeriod && month > bank.interestSupportPeriod) {
+                        // Only interest payment, no principal
+                        payment = maxLoan * (referenceRate / 100) / 12;
+                    }
+                    // Phase 4: After both grace period and interest support period
+                    else {
+                        // Full payment (principal + interest)
+                        const remainingPrincipal = maxLoan;
+                        const remainingTermYears = bank.maxLoanTerm - Math.max(bank.gracePeriod, bank.interestSupportPeriod) / 12;
+                        payment = calculateMonthlyPayment(remainingPrincipal, referenceRate, remainingTermYears);
+                    }
+                    
+                    monthlyData.push(payment);
+                }
+                
+                datasets.push({
+                    label: bank.name,
+                    data: monthlyData,
+                    borderColor: bank.color,
+                    backgroundColor: bank.color + '20',
+                    fill: false,
+                    tension: 0.1,
+                    pointRadius: 2,
+                    pointHoverRadius: 5
+                });
+            });
+            
+            return {
+                labels: Array.from({length: maxMonths}, (_, i) => `Tháng ${i + 1}`),
+                datasets: datasets
+            };
+        }
+
+        // Generate customer payment data for chart - CORRECTED with accurate timeline
+        function generateCustomerPaymentData(propertyPrice) {
+            const maxMonths = 40; // Timeline to show payment schedule
+            const datasets = [];
+            
+            Object.keys(bankData).forEach(bankKey => {
+                const bank = bankData[bankKey];
+                const monthlyData = [];
+                
+                // Generate data for each month
+                for (let month = 0; month <= maxMonths; month++) {
+                    let currentCumulative = 0;
+                    
+                    // Check each payment event in the timeline
+                    bank.customerPayment.timeline.forEach(event => {
+                        // If this event has occurred by the current month, add its payment
+                        if (month >= event.month) {
+                            currentCumulative += propertyPrice * (event.percentage / 100);
+                        }
+                    });
+                    
+                    monthlyData.push(currentCumulative);
+                }
+                
+                datasets.push({
+                    label: bank.name,
+                    data: monthlyData,
+                    borderColor: bank.color,
+                    backgroundColor: bank.color + '20',
+                    fill: false,
+                    tension: 0.1,
+                    pointRadius: 2,
+                    pointHoverRadius: 5,
+                    stepped: true
+                });
+            });
+            
+            return {
+                labels: Array.from({length: maxMonths + 1}, (_, i) => `Tháng ${i}`),
+                datasets: datasets
+            };
+        }
+
+        // Generate bank disbursement data for chart - CORRECTED with accurate timeline
+        function generateBankDisbursementData(propertyPrice) {
+            const maxMonths = 40; // Timeline to show disbursement schedule
+            const datasets = [];
+            
+            Object.keys(bankData).forEach(bankKey => {
+                const bank = bankData[bankKey];
+                const monthlyData = [];
+                
+                // Generate data for each month
+                for (let month = 0; month <= maxMonths; month++) {
+                    let currentCumulative = 0;
+                    
+                    // Check each disbursement event in the timeline
+                    bank.bankDisbursement.timeline.forEach(event => {
+                        // If this event has occurred by the current month, add its disbursement
+                        if (month >= event.month) {
+                            currentCumulative += propertyPrice * (event.percentage / 100);
+                        }
+                    });
+                    
+                    monthlyData.push(currentCumulative);
+                }
+                
+                datasets.push({
+                    label: bank.name,
+                    data: monthlyData,
+                    borderColor: bank.disbursementPhase === 2 ? '#10B981' : '#F59E0B',
+                    backgroundColor: (bank.disbursementPhase === 2 ? '#10B981' : '#F59E0B') + '20',
+                    fill: false,
+                    tension: 0.1,
+                    pointRadius: 2,
+                    pointHoverRadius: 5,
+                    stepped: true
+                });
+            });
+            
+            return {
+                labels: Array.from({length: maxMonths + 1}, (_, i) => `Tháng ${i}`),
+                datasets: datasets
+            };
+        }
+
+        // Create cash flow chart
+        function createCashFlowChart(propertyPrice) {
+            const ctx = document.getElementById('cashFlowChart').getContext('2d');
+            
+            if (cashFlowChart) {
+                cashFlowChart.destroy();
+            }
+            
+            const chartData = generateCashFlowData(propertyPrice);
+            
+            cashFlowChart = new Chart(ctx, {
+                type: 'line',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Khoản Thanh Toán Hàng Tháng Theo Thời Gian',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        },
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                usePointStyle: true,
+                                pointStyle: 'line'
+                            }
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    const bankName = context.dataset.label;
+                                    const month = context.dataIndex + 1;
+                                    const payment = context.parsed.y;
+                                    
+                                    let phase = '';
+                                    const bank = Object.values(bankData).find(b => b.name === bankName);
+                                    
+                                    if (month <= Math.min(bank.gracePeriod, bank.interestSupportPeriod)) {
+                                        phase = ' (Ân hạn + Hỗ trợ lãi suất)';
+                                    } else if (month <= bank.interestSupportPeriod && month > bank.gracePeriod) {
+                                        phase = ' (Chỉ trả gốc)';
+                                    } else if (month <= bank.gracePeriod && month > bank.interestSupportPeriod) {
+                                        phase = ' (Chỉ trả lãi)';
+                                    } else {
+                                        phase = ' (Trả đầy đủ)';
+                                    }
+                                    
+                                    return `${bankName}: ${formatCurrency(payment)}${phase}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Thời gian (Tháng)',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                maxTicksLimit: 12
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Khoản thanh toán (VNĐ)',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            }
+                        }
+                    },
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    elements: {
+                        point: {
+                            radius: 2,
+                            hoverRadius: 6
+                        }
+                    }
+                }
+            });
+        }
+
+        // Create customer payment chart
+        function createCustomerPaymentChart(propertyPrice) {
+            const ctx = document.getElementById('customerPaymentChart').getContext('2d');
+            
+            if (customerPaymentChart) {
+                customerPaymentChart.destroy();
+            }
+            
+            const chartData = generateCustomerPaymentData(propertyPrice);
+            
+            customerPaymentChart = new Chart(ctx, {
+                type: 'line',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Dòng Tiền Chi Trả Vốn Tự Có Theo Thời Gian',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        },
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    const bankName = context.dataset.label;
+                                    const value = context.parsed.y;
+                                    const month = context.dataIndex;
+                                    
+                                    if (value === 0) return null;
+                                    
+                                    return `${bankName}: ${formatCurrency(value)} (Tích lũy đến tháng ${month})`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Thời gian (Tháng từ ký HĐMB)',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                maxTicksLimit: 12
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Số tiền vốn tự có tích lũy (VNĐ)',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            }
+                        }
+                    },
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                }
+            });
+        }
+
+        // Create bank disbursement chart
+        function createBankDisbursementChart(propertyPrice) {
+            const ctx = document.getElementById('bankDisbursementChart').getContext('2d');
+            
+            if (bankDisbursementChart) {
+                bankDisbursementChart.destroy();
+            }
+            
+            const chartData = generateBankDisbursementData(propertyPrice);
+            
+            bankDisbursementChart = new Chart(ctx, {
+                type: 'line',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Dòng Tiền Ngân Hàng Giải Ngân Theo Thời Gian',
+                            font: {
+                                size: 16,
+                                weight: 'bold'
+                            }
+                        },
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    const bankName = context.dataset.label;
+                                    const value = context.parsed.y;
+                                    const month = context.dataIndex;
+                                    
+                                    if (value === 0) return null;
+                                    
+                                    const bank = Object.values(bankData).find(b => b.name === bankName);
+                                    const phaseInfo = bank.disbursementPhase === 2 ? '(Đợt 2)' : '(Đợt 4)';
+                                    
+                                    return `${bankName}: ${formatCurrency(value)} ${phaseInfo} (Tích lũy đến tháng ${month})`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Thời gian (Tháng từ ký HĐMB)',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                maxTicksLimit: 12
+                            }
+                        },
+                        y: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Số tiền ngân hàng giải ngân tích lũy (VNĐ)',
+                                font: {
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value);
+                                }
+                            }
+                        }
+                    },
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                }
+            });
         }
 
         // Analyze financial situation
@@ -621,6 +1273,11 @@
             
             document.getElementById('overview-property-price').textContent = formatCurrency(propertyPrice);
             
+            // Create charts
+            createCashFlowChart(propertyPrice);
+            createCustomerPaymentChart(propertyPrice);
+            createBankDisbursementChart(propertyPrice);
+            
             // Financial situation analysis
             const analysis = analyzeFinancialSituation(initialCapital, propertyPrice, monthlyIncome);
             document.getElementById('capital-status').textContent = analysis.capitalStatus;
@@ -657,7 +1314,7 @@
                     <td class="py-3 px-4 border-b">${bank.name}</td>
                     <td class="py-3 px-4 border-b">${bank.maxLoanRatio}% (${bank.maxLoanRatioWithCollateral}% với tài sản khác)</td>
                     <td class="py-3 px-4 border-b">${bank.interestSupportPeriod} tháng (Đợt ${bank.disbursementPhase})</td>
-                    <td class="py-3 px-4 border-b">${bank.gracePeriod} tháng ${bank.note ? `(${bank.note})` : ''}</td>
+                    <td class="py-3 px-4 border-b">${bank.gracePeriod} tháng</td>
                     <td class="py-3 px-4 border-b">${bank.maxLoanTerm} năm</td>
                     <td class="py-3 px-4 border-b">${formatCurrency(maxLoan)}</td>
                 `;
@@ -712,6 +1369,18 @@
             const monthlyPaymentAfterAll = calculateMonthlyPayment(maxLoan, referenceRate, bank.maxLoanTerm);
             const incomeRatio = (monthlyPaymentAfterAll / monthlyIncome) * 100;
             
+            // Build customer payment details
+            let customerPaymentDetails = '';
+            bank.customerPayment.timeline.forEach(event => {
+                customerPaymentDetails += `<li>${event.label}: ${event.percentage}%</li>`;
+            });
+            
+            // Build bank disbursement details
+            let bankDisbursementDetails = '';
+            bank.bankDisbursement.timeline.forEach(event => {
+                bankDisbursementDetails += `<li>${event.label}: ${event.percentage}%</li>`;
+            });
+            
             bankContent.innerHTML = `
                 <h3 class="text-2xl font-bold text-blue-600 mb-6">${bank.name} - Phân Tích Phương Án Vay Vốn</h3>
                 
@@ -744,7 +1413,7 @@
                                 <li><span class="font-medium">Ngân hàng giải ngân cho Đợt:</span> <span class="text-purple-600 font-medium">Đợt ${bank.disbursementPhase}</span> theo Phương thức thanh toán của Chủ Đầu tư</li>
                                 <li><span class="font-medium">Hỗ trợ lãi suất:</span> Chủ Đầu tư hỗ trợ <span class="text-purple-600 font-medium">100% lãi vay</span> cho khoản giải ngân Đợt ${bank.disbursementPhase}</li>
                                 <li><span class="font-medium">Thời gian hỗ trợ lãi suất:</span> <span class="text-purple-600 font-medium">${bank.interestSupportPeriod} tháng</span> kể từ ngày giải ngân đầu tiên</li>
-                                <li><span class="font-medium">Thời gian ân hạn nợ gốc tối đa:</span> <span class="text-purple-600 font-medium">${bank.gracePeriod} tháng</span> ${bank.note ? `(${bank.note})` : ''}</li>
+                                <li><span class="font-medium">Thời gian ân hạn nợ gốc tối đa:</span> <span class="text-purple-600 font-medium">${bank.gracePeriod} tháng</span></li>
                             </ul>
                         </div>
                         
@@ -761,67 +1430,23 @@
                 </div>
                 
                 <div class="mt-6">
-                    <h4 class="text-lg font-semibold text-gray-800 mb-4">Kế hoạch thanh toán minh họa</h4>
-                    <div class="bg-white rounded-lg border border-gray-200 p-4">
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full border-collapse">
-                                <thead>
-                                    <tr class="bg-gray-100">
-                                        <th class="py-3 px-4 text-left border">Giai đoạn</th>
-                                        <th class="py-3 px-4 text-left border">Thời gian</th>
-                                        <th class="py-3 px-4 text-left border">Gốc hàng tháng</th>
-                                        <th class="py-3 px-4 text-left border">Lãi hàng tháng</th>
-                                        <th class="py-3 px-4 text-left border">Khoản trả hàng tháng</th>
-                                        <th class="py-3 px-4 text-left border">Ghi chú</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Phase 1: Interest support & Grace period -->
-                                    <tr class="bg-blue-50">
-                                        <td class="py-3 px-4 border">Giai đoạn 1</td>
-                                        <td class="py-3 px-4 border">Tháng 1-${Math.min(bank.interestSupportPeriod, bank.gracePeriod)}</td>
-                                        <td class="py-3 px-4 border">0 VNĐ</td>
-                                        <td class="py-3 px-4 border">0 VNĐ (hỗ trợ 100%)</td>
-                                        <td class="py-3 px-4 border font-medium">0 VNĐ</td>
-                                        <td class="py-3 px-4 border">Ân hạn nợ gốc & Hỗ trợ lãi suất</td>
-                                    </tr>
-                                    
-                                    ${bank.gracePeriod < bank.interestSupportPeriod ? `
-                                    <!-- Phase 2: After Grace Period, still in Interest Support Period -->
-                                    <tr class="bg-green-50">
-                                        <td class="py-3 px-4 border">Giai đoạn 2</td>
-                                        <td class="py-3 px-4 border">Tháng ${bank.gracePeriod + 1}-${bank.interestSupportPeriod}</td>
-                                        <td class="py-3 px-4 border">${formatCurrency(maxLoan / (bank.maxLoanTerm * 12 - bank.gracePeriod))}</td>
-                                        <td class="py-3 px-4 border">0 VNĐ (hỗ trợ 100%)</td>
-                                        <td class="py-3 px-4 border font-medium">${formatCurrency(maxLoan / (bank.maxLoanTerm * 12 - bank.gracePeriod))}</td>
-                                        <td class="py-3 px-4 border">Trả gốc, lãi được hỗ trợ</td>
-                                    </tr>
-                                    ` : ''}
-                                    
-                                    ${bank.gracePeriod > bank.interestSupportPeriod ? `
-                                    <!-- Phase 2: After Interest Support, still in Grace Period -->
-                                    <tr class="bg-yellow-50">
-                                        <td class="py-3 px-4 border">Giai đoạn 2</td>
-                                        <td class="py-3 px-4 border">Tháng ${bank.interestSupportPeriod + 1}-${bank.gracePeriod}</td>
-                                        <td class="py-3 px-4 border">0 VNĐ</td>
-                                        <td class="py-3 px-4 border">${formatCurrency(maxLoan * (referenceRate/100) / 12)}</td>
-                                        <td class="py-3 px-4 border font-medium">${formatCurrency(maxLoan * (referenceRate/100) / 12)}</td>
-                                        <td class="py-3 px-4 border">Chỉ trả lãi, ân hạn nợ gốc</td>
-                                    </tr>
-                                    ` : ''}
-                                    
-                                    <!-- Phase 3: After Interest Support & Grace Period -->
-                                    <tr>
-                                        <td class="py-3 px-4 border">Giai đoạn 3</td>
-                                        <td class="py-3 px-4 border">Tháng ${Math.max(bank.interestSupportPeriod, bank.gracePeriod) + 1}-${bank.maxLoanTerm * 12}</td>
-                                        <td class="py-3 px-4 border" colspan="2">Gốc + lãi theo lịch trả nợ của ngân hàng</td>
-                                        <td class="py-3 px-4 border font-medium">${formatCurrency(monthlyPaymentAfterAll)}</td>
-                                        <td class="py-3 px-4 border">Ước tính với lãi suất ${referenceRate}%/năm</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-4">Phương thức thanh toán chi tiết</h4>
+                    <div class="bg-white rounded-lg border border-gray-200 p-4 mb-4">
+                        <h5 class="font-medium text-gray-800 mb-2">Phân bổ thanh toán theo timeline:</h5>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-blue-50 rounded-lg p-3">
+                                <h6 class="font-medium text-blue-800 mb-2">Khách hàng thanh toán (${bank.customerPayment.total}% tổng giá trị)</h6>
+                                <ul class="text-sm space-y-1">
+                                    ${customerPaymentDetails}
+                                </ul>
+                            </div>
+                            <div class="bg-green-50 rounded-lg p-3">
+                                <h6 class="font-medium text-green-800 mb-2">Ngân hàng giải ngân (${bank.bankDisbursement.total}% tổng giá trị)</h6>
+                                <ul class="text-sm space-y-1">
+                                    ${bankDisbursementDetails}
+                                </ul>
+                            </div>
                         </div>
-                        <p class="mt-4 text-sm text-gray-500 italic">* Lưu ý: Lãi suất sau thời gian hỗ trợ là ước tính với lãi suất tham khảo ${referenceRate}%/năm và có thể thay đổi theo thị trường.</p>
                     </div>
                 </div>
                 
